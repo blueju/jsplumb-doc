@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <style>
+      #jsplumb-container {
+        padding: 20px;
+        height: 300px;
+        border: 1px solid gray;
+      }
+
+      .node {
+        position: absolute;
+        height: 100px;
+        width: 100px;
+        border: 2px solid #aaa;
+      }
+
+      .node:nth-of-type(1) {
+        top: 50px;
+        left: 50px;
+      }
+
+      .node:nth-of-type(2) {
+        top: 50px;
+        left: 450px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="jsplumb-container">
+      <div id="node-1" class="node">Node 1</div>
+      <div id="node-2" class="node">Node 2</div>
+    </div>
+    <script src="./node_modules//jsplumb/dist/js/jsplumb.js"></script>
+    <script>
+      window.jsPlumb.ready(function() {
+        let jsPlumb = window.jsPlumb;
+        jsPlumb.connect({
+          source: "node-1",
+          target: "node-2"
+        });
+      });
+    </script>
+  </body>
+</html>

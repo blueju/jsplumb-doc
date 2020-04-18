@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Static Template</title>
+    <style>
+      #jsplumb-container {
+        top: 10px;
+        left: 10px;
+        border: 1px solid #ccc;
+        position: relative;
+        width: 500px;
+        height: 500px;
+      }
+
+      #jsplumb-container .item {
+        width: 100px;
+        height: 100px;
+        border: 1px solid #ccc;
+      }
+      #jsplumb-container .item:nth-of-type(1) {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+      }
+      #jsplumb-container .item:nth-of-type(2) {
+        position: absolute;
+        left: 200px;
+        top: 10px;
+      }
+      #jsplumb-container .item:nth-of-type(3) {
+        position: absolute;
+        left: 300px;
+        top: 200px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="jsplumb-container">
+      <div id="node-1" class="item">Node 1</div>
+      <div id="node-2" class="item">Node 2</div>
+      <div id="node-3" class="item">Node 3</div>
+    </div>
+    <script src="./node_modules/jsplumb/dist/js/jsplumb.js"></script>
+    <script>
+      jsPlumb.ready(function() {
+        jsPlumb.addEndpoint("node-1");
+        jsPlumb.addEndpoint("node-2", {
+          anchor: "Right"
+        });
+        jsPlumb.addEndpoint("node-3", {
+          anchor: "Left"
+        });
+      });
+    </script>
+  </body>
+</html>

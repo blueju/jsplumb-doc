@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>创建端点</title>
+    <style>
+      #jsplumb-container {
+        top: 10px;
+        left: 10px;
+        border: 1px solid #ccc;
+        position: relative;
+        width: 500px;
+        height: 500px;
+      }
+
+      #jsplumb-container .item {
+        width: 100px;
+        height: 100px;
+        border: 1px solid #ccc;
+      }
+      #jsplumb-container .item:nth-of-type(1) {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+      }
+      #jsplumb-container .item:nth-of-type(2) {
+        position: absolute;
+        left: 200px;
+        top: 10px;
+      }
+      #jsplumb-container .item:nth-of-type(3) {
+        position: absolute;
+        left: 300px;
+        top: 200px;
+      }
+      #jsplumb-container .item:nth-of-type(4) {
+        position: absolute;
+        left: 50px;
+        top: 250px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="jsplumb-container">
+      <div id="node-1" class="item">Node 1</div>
+      <div id="node-2" class="item">Node 2</div>
+      <div id="node-3" class="item">Node 3</div>
+      <div id="node-4" class="item">Node 4</div>
+    </div>
+    <script src="./node_modules/jsplumb/dist/js/jsplumb.js"></script>
+    <script>
+      jsPlumb.ready(function() {
+        // 为节点一创建端点
+        jsPlumb.addEndpoint("node-1");
+        // 为节点二创建端点，端点/锚点位置在节点右方
+        jsPlumb.addEndpoint("node-2", {
+          anchor: "Right"
+        });
+        // 为节点三创建端点，
+        // 端点/锚点位置在节点左方、可从该端点/锚点拖拽出连接线
+        jsPlumb.addEndpoint("node-3", {
+          isSource: true,
+          anchor: "Left"
+        });
+        // 为节点四创建端点，
+        // 端点/锚点位置在节点上方、该端点/锚点可接收连接线（试试从节点三拖出连接点到节点四）
+        jsPlumb.addEndpoint("node-4", {
+          isTarget: true,
+          anchor: "Top"
+        });
+      });
+    </script>
+  </body>
+</html>

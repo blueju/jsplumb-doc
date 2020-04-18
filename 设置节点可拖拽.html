@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Static Template</title>
+    <style>
+      #jsplumb-container .item {
+        width: 100px;
+        height: 100px;
+        border: 1px solid #ccc;
+      }
+      #jsplumb-container .item:nth-of-type(1) {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+      }
+      #jsplumb-container .item:nth-of-type(2) {
+        position: absolute;
+        left: 200px;
+        top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="jsplumb-container">
+      <div id="item-1" class="item"></div>
+      <div id="item-2" class="item"></div>
+    </div>
+    <script src="https://cdn.bootcss.com/jsPlumb/2.11.2/js/jsplumb.js"></script>
+    <script>
+      jsPlumb.ready(function() {
+        jsPlumb.connect({
+          source: "item-1",
+          target: "item-2",
+          endpoint: "Rectangle"
+        });
+        // 设置 id 为 item-1 的节点可被拖拽
+        jsPlumb.draggable("item-1");
+        // 设置 id 为 item-2 的节点可被拖拽
+        jsPlumb.draggable("item-2");
+        // 设置 class 为 item 的节点可被拖拽
+        // jsPlumb.draggable(document.getElementsByClassName("item"));
+      });
+    </script>
+  </body>
+</html>

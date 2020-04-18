@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Static Template</title>
+    <link
+      rel="stylesheet"
+      href="../node_modules/font-awesome/css/font-awesome.css"
+    />
+    <style>
+      body {
+        margin: 0;
+      }
+      #app {
+        padding: 20px;
+        display: grid;
+        grid-template-columns: 230px auto;
+        column-gap: 10px;
+      }
+      /* 元素面板 */
+      #item-pannel {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 100px 100px;
+        border: 1px solid #ccc;
+        box-shadow: #ccc 1px 1px 2px 1px;
+        padding: 10px;
+        row-gap: 10px;
+        column-gap: 10px;
+      }
+      #item-pannel .grid {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #item-pannel .grid .item {
+        cursor: move;
+      }
+      .rect {
+        background-color: #e8f8ff;
+        border: 1px solid #349eff;
+        width: 80px;
+        height: 50px;
+        border-radius: 4px;
+      }
+      .circle {
+        background-color: #fff3ea;
+        border: 1px solid #ffc575;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+      }
+      .diamond {
+        background-color: #e8fffb;
+        border: 1px solid #67ded6;
+        width: 60px;
+        height: 60px;
+        transform: rotate(-45deg);
+      }
+      #jsplumb-container {
+        width: 100%;
+        border: 1px solid #ccc;
+        position: relative;
+        height: 400px;
+        /* 网格 */
+        background-image: linear-gradient(
+            90deg,
+            rgba(180, 180, 180, 0.15) 10%,
+            rgba(0, 0, 0, 0) 10%
+          ),
+          linear-gradient(rgba(180, 180, 180, 0.15) 10%, rgba(0, 0, 0, 0) 10%);
+        background-size: 10px 10px;
+      }
+
+      #jsplumb-container .node {
+        position: absolute;
+        cursor: move;
+      }
+      .delete-node-icon {
+        position: absolute;
+        right: 3px;
+        top: 3px;
+        cursor: pointer;
+      }
+      .delete-node-icon:hover {
+        color: red;
+      }
+
+      /* 以下是修改jsPlumb自带样式 */
+      .jtk-endpoint {
+        cursor: pointer;
+      }
+      .jtk-endpoint svg circle {
+        r: 3;
+        fill: #fff;
+        stroke: #1890ff;
+      }
+      .jtk-endpoint svg circle:hover {
+        fill: #1890ff;
+      }
+      #jsplumb-container svg path {
+        stroke: #aab7c4;
+      }
+      #jsplumb-container svg path:hover {
+        stroke: #2a99ff;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <section id="item-pannel">
+        <div class="grid">
+          <div
+            class="item rect"
+            draggable="true"
+            ondragstart="dragstart(event)"
+          ></div>
+        </div>
+        <div class="grid">
+          <div
+            class="item circle"
+            draggable="true"
+            ondragstart="dragstart(event)"
+          ></div>
+        </div>
+        <div class="grid">
+          <div
+            class="item diamond"
+            draggable="true"
+            ondragstart="dragstart(event)"
+          ></div>
+        </div>
+      </section>
+      <section
+        id="jsplumb-container"
+        ondragover="dragover(event)"
+        ondrop="drop(event)"
+      ></section>
+    </div>
+  </body>
+  <script src="../node_modules/jsplumb/dist/js/jsplumb.js"></script>
+  <script src="../node_modules/uuid/dist/umd/uuidv4.min.js"></script>
+  <script>
+    function dragstart(e) {
+      console.log("拖");
+      console.log(e);
+      let mouseX = e.offsetX;
+      let mouseY = e.offsetY;
+      let styleClass = e.target.classList[1];
+      console.log(styleClass);
+
+      e.dataTransfer.setData("styleClass", styleClass);
+      e.dataTransfer.setData("mouseX", mouseX);
+      e.dataTransfer.setData("mouseY", mouseY);
+    }
+    function dragover(e) {
+      e.preventDefault();
+    }
+    function drop(e) {
+      e.preventDefault();
+      console.log("放");
+      console.log(e);
+      let uuid = uuidv4();
+      let nodeDiv = document.createElement("div");
+      nodeDiv.setAttribute("id", uuid);
+      nodeDiv.setAttribute("title", uuid);
+      nodeDiv.setAttribute("class", "node");
+      let x = e.offsetX;
+      let y = e.offsetY;
+      let mouseX = e.dataTransfer.getData("mouseX");
+      let mouseY = e.dataTransfer.getData("mouseY");
+      nodeDiv.classList.add(e.dataTransfer.getData("styleClass"));
+      nodeDiv.setAttribute(
+        "style",
+        `left:${x - mouseX}px;top:${y - mouseY}px;`
+      );
+      // nodeDiv.innerHTML = '<i class="fa fa-trash-o delete-node-icon"></i>';
+      document.getElementById("jsplumb-container").appendChild(nodeDiv);
+      jsPlumb.draggable(uuid, {
+        containment: "jsplumb-container",
+        grid: [10, 10]
+      });
+      let common = {
+        isSource: true,
+        isTarget: true,
+        connector: "Flowchart"
+      };
+      jsPlumb.addEndpoint(uuid, common, {
+        anchor: "Top"
+      });
+      jsPlumb.addEndpoint(uuid, common, {
+        anchor: "Right"
+      });
+      jsPlumb.addEndpoint(uuid, common, {
+        anchor: "Bottom"
+      });
+      jsPlumb.addEndpoint(uuid, common, {
+        anchor: "Left",
+        overlays: [["Arrow", { width: 12, length: 12, location: 0.5 }]]
+      });
+      jsPlumb.hide(uuid, true);
+      nodeDiv.addEventListener("contextmenu", function(e) {
+        console.log(e);
+      });
+      nodeDiv.addEventListener("click", function(e) {
+        jsPlumb.show(e.target.id, true);
+      });
+      // nodeDiv.addEventListener("mouseover", function(e) {
+      //   jsPlumb.show(e.target.id, true);
+      // });
+      // nodeDiv.addEventListener("mouseout", function(e) {
+      //   jsPlumb.hide(e.target.id, true);
+      // });
+    }
+    jsPlumb.ready(function() {
+      deleteNodeEvent();
+      jsPlumb.bind("dblclick", function(connection, originalEvent) {
+        console.log(connection, originalEvent);
+      });
+    });
+    // 删除节点
+    function deleteNodeEvent() {
+      document
+        .getElementById("jsplumb-container")
+        .addEventListener("click", e => {
+          let classList = [...e.target.classList];
+          if (classList.includes("delete-node-icon")) {
+            jsPlumb.remove(e.target.parentNode.id);
+          }
+        });
+    }
+  </script>
+</html>

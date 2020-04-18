@@ -1,0 +1,26 @@
+{
+  "name": "jsplumb-demo",
+  "description": "",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config ./complete-demo/webpack.config.js --progress --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blueju/jsplumb.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/blueju/jsplumb/issues"
+  },
+  "homepage": "https://github.com/blueju/jsplumb#readme",
+  "dependencies": {
+    "font-awesome": "^4.7.0",
+    "jsplumb": "^2.12.14",
+    "uuid": "^7.0.2"
+  },
+  "devDependencies": {}
+}

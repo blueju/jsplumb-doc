@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Static Template</title>
+    <style>
+      #jsplumb-container {
+        top: 10px;
+        left: 10px;
+        border: 1px solid #ccc;
+        position: relative;
+        width: 500px;
+        height: 500px;
+      }
+
+      #jsplumb-container .item {
+        width: 100px;
+        height: 100px;
+        border: 1px solid #ccc;
+      }
+      #jsplumb-container .item:nth-of-type(1) {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+      }
+      #jsplumb-container .item:nth-of-type(2) {
+        position: absolute;
+        left: 200px;
+        top: 10px;
+      }
+      #jsplumb-container .item:nth-of-type(3) {
+        position: absolute;
+        left: 300px;
+        top: 200px;
+      }
+      #jsplumb-container .item:nth-of-type(4) {
+        position: absolute;
+        left: 50px;
+        top: 250px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="jsplumb-container">
+      <div id="node-1" class="item">Node 1</div>
+      <div id="node-2" class="item">Node 2</div>
+      <div id="node-3" class="item">Node 3</div>
+      <div id="node-4" class="item">Node 4</div>
+    </div>
+    <script src="./node_modules/jsplumb/dist/js/jsplumb.js"></script>
+    <script>
+      jsPlumb.ready(function() {
+        instance = jsPlumb.getInstance({
+          EndpointStyle: {
+            fill: "blue",
+            outlineWidth: 50,
+            outlineStroke: "red"
+          }
+        });
+        instance.addEndpoint("node-1");
+        instance.connect({
+          source: "node-2",
+          target: "node-3",
+          endpointStyle: {
+            fill: "green",
+            outlineStroke: "orange",
+            outlineWidth: 1
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

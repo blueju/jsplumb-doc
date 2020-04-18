@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Static Template</title>
+    <style>
+      #jsplumb-container {
+        top: 10px;
+        left: 10px;
+        border: 1px solid #ccc;
+        position: relative;
+        width: 500px;
+        height: 500px;
+      }
+
+      #jsplumb-container .item {
+        width: 100px;
+        height: 100px;
+        border: 1px solid #ccc;
+      }
+      #jsplumb-container .item:nth-of-type(1) {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+      }
+      #jsplumb-container .item:nth-of-type(2) {
+        position: absolute;
+        left: 200px;
+        top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="jsplumb-container">
+      <div id="node-1" class="item">Node 1</div>
+      <div id="node-2" class="item">Node 2</div>
+    </div>
+    <script src="./node_modules/jsplumb/dist/js/jsplumb.js"></script>
+    <script>
+      window.jsPlumb.ready(function() {
+        // 自动连接两个节点
+        let connect = jsPlumb.connect({
+          source: "node-1",
+          target: "node-2"
+        });
+
+        /* 全局事件绑定 */
+        // 单击连接线
+        window.jsPlumb.bind("click", (connect, e) => {
+          console.log("（全局事件绑定）点击到了连接线");
+          console.log("打印 connect 对象 和 鼠标事件 e");
+          console.dir(connect);
+          console.dir(e);
+        });
+
+        /* 单独事件绑定 */
+        // 右击连接线
+        connect.bind("contextmenu", (conn, e) => {
+          console.log("（单独事件绑定）右击到了连接线");
+          // 阻止点击右键的默认事件
+          e.preventDefault();
+          console.log("打印 connect 对象 和 鼠标事件 e");
+          console.dir(conn);
+          console.dir(e);
+        });
+      });
+    </script>
+  </body>
+</html>
